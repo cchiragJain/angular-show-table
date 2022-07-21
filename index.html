@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="App">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- Bootstrap -->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+			crossorigin="anonymous"
+		></script>
+		<!-- Angular -->
+		<script src="./app/lib/angular.js"></script>
+		<script src="./app/app.js"></script>
+		<title>Document</title>
+	</head>
+	<body ng-controller="TableController">
+		<button
+			class="btn btn-primary"
+			data-bs-toggle="modal"
+			data-bs-target="#exampleModal"
+		>
+			Add Table
+		</button>
+		<div class="modal" tabindex="-1" id="exampleModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!-- Title -->
+					<div class="modal-header">
+						<h5 class="modal-title">Add Data for table</h5>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body">
+						<!-- Add form here -->
+						<form>
+							<div class="mb-3">
+								<!-- row number input -->
+								<label for="rownumber" class="form-label"
+									>Enter Number of rows</label
+								>
+								<input
+									type="number"
+									class="form-control"
+									ng-model="rowNumber"
+									id="rownumber"
+								/>
+								<!-- col number input -->
+								<label for="colnumber" class="form-label"
+									>Enter Number of columns</label
+								>
+								<input
+									type="number"
+									class="form-control"
+									ng-model="colNumber"
+									id="colnumber"
+								/>
+								<!-- select row or column headers -->
+								<label class="form-check-label" for="colRadio">
+									Column Headers</label
+								>
+								<input
+									type="radio"
+									class="form-check-input"
+									name="colOrRowHeader"
+									id="colRadio"
+									ng-model="headerType"
+								/>
+								<label class="form-check-label" for="rowRadio"
+									>Row Headers</label
+								>
+								<input
+									type="radio"
+									class="form-check-input"
+									name="colOrRowHeader"
+									id="rowRadio"
+								/>
+
+								<label for="headers" class="form-label"
+									>Enter {{colNumber}} headers for the columns
+									seperated by comma (,)</label
+								>
+								<input
+									class="form-control"
+									type="text"
+									ng-model="headers"
+									id="headers"
+								/>
+								<!-- <small ng-show="showNotEqualError"
+									>Headers don't equal col numbers</small
+								> -->
+							</div>
+							<div class="modal-footer">
+								<button
+									type="button"
+									class="btn btn-secondary"
+									data-bs-dismiss="modal"
+								>
+									Close
+								</button>
+								<button
+									type="button"
+									class="btn btn-primary"
+									data-bs-dismiss="modal"
+									ng-click="createTable()"
+								>
+									Submit
+								</button>
+							</div>
+						</form>
+					</div>
+					<!-- Add submit button here add all this to the scope using ng-model and then check using console.log and set isSubmitted to true-->
+				</div>
+			</div>
+		</div>
+		<!-- ng-if when isSubmitted is true -->
+		<table class="table" ng-if="isSubmitted">
+			<thead>
+				<tr>
+					<th
+						scope="col"
+						ng-repeat="(key, value) in headers track by $index"
+					>
+						{{value}}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr
+					ng-repeat="x in [].constructor(rowNumber) track by $index"
+					ng-init="rowIndex=$index"
+				>
+					<th scope="row">{{$index + 1}}</th>
+					<td
+						ng-repeat="x in [].constructor(colNumber - 1) track by $index"
+						ng-init="colIndex=$index"
+					>
+						<input
+							type="text"
+							class="form-control"
+							ng-model="data[rowIndex][colIndex]"
+							ng-change="logData()"
+						/>
+						<!-- <p>{{data[rowIndex][colIndex]}}</p> -->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>
